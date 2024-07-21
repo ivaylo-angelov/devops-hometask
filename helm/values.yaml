@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/ivaylo-angelov/ivaylo-angelov/devops-hometask
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+
+postgresql:
+  primary:
+    initdb:
+      scripts:
+        init.sql: |
+          CREATE TABLE IF NOT EXISTS crypto_data (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                symbol VARCHAR(10),
+                price NUMERIC
+            )
+  audit:
+    logConnections: true
+
+coinmarketcap:
+  url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
+
+dependencies:
+  - name: postgresql
+    version: 15.5.17
+    repository: https://charts.bitnami.com/bitnami
