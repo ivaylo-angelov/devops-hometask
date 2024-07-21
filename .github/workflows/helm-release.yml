@@ -1,0 +1,44 @@
+name: Helm Chart Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+    - name: Install helm-s3 plugin
+      run: |
+        helm plugin install https://github.com/hypnoglow/helm-s3.git
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2
+
+    - name: Add S3 repository to Helm
+      run: |
+        helm repo add stable s3://${{ secrets.S3_BUCKET }}/stable
+        helm repo update
+
+    - name: Package and Push Helm Chart
+      run: |
+        helm package ./helm-chart/my-backend-app
+        helm s3 push ./my-backend-app-*.tgz stable
