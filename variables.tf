@@ -14,3 +14,9 @@ variable "s3_bucket_name" {
   type        = string
   default     = "my-random-data-bucket"
 }
+
+variable "certificate_arn" {
+  description = "The ARN of the ACM certificate for the custom domain"
+  type        = string
+  default     = "arn:aws:acm:eu-west-2:975050253939:certificate/0d304b70-8079-45af-ad1d-2d88f55e3521"
+}

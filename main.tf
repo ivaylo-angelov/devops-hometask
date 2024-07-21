@@ -134,3 +134,14 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.random_data_api.id
   stage_name  = "prod"
 }
+
+resource "aws_api_gateway_domain_name" "api_domain" {
+  domain_name    = "example.api.com"
+  certificate_arn = var.certificate_arn
+}
+
+resource "aws_api_gateway_base_path_mapping" "path_mapping" {
+  api_id      = aws_api_gateway_rest_api.random_data_api.id
+  stage_name  = aws_api_gateway_deployment.api_deployment.stage_name
+  domain_name = aws_api_gateway_domain_name.api_domain.domain_name
+}
