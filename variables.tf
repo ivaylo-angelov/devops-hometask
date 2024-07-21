@@ -18,5 +18,5 @@ variable "s3_bucket_name" {
 variable "certificate_arn" {
   description = "The ARN of the ACM certificate for the custom domain"
   type        = string
-  default     = "arn:aws:acm:us-east-1:975050253939:certificate/61bb5b81-8a86-4163-84d6-e9cf19c433a2"
+  default     = "arn:aws:acm:us-east-1:975050253939:certificate/4808dafc-9ad7-404b-b587-2053e49d6b7b"
 }
