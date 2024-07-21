@@ -138,6 +138,10 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 resource "aws_api_gateway_domain_name" "api_domain" {
   domain_name    = "example.api.com"
   certificate_arn = var.certificate_arn
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_base_path_mapping" "path_mapping" {
