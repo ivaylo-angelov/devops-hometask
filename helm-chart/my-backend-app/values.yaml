@@ -25,8 +25,3 @@ postgresql:
 
 coinmarketcap:
   url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
-
-dependencies:
-  - name: postgresql
-    version: 15.5.17
-    repository: https://charts.bitnami.com/bitnami
