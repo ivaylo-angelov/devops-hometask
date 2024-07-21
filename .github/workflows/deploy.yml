@@ -34,7 +34,11 @@ jobs:
 
       - name: Plan Terraform
         run: terraform plan -out=tfplan
+        env:
+          TF_VAR_coinmarketcap_api_key: ${{ secrets.COINMARKETCAP_API_KEY }}
 
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
+        env:
+          TF_VAR_coinmarketcap_api_key: ${{ secrets.COINMARKETCAP_API_KEY }}

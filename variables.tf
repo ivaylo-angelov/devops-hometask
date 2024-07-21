@@ -12,5 +12,5 @@ variable "coinmarketcap_api_key" {
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket"
   type        = string
-  default     = "random-data-bucket2024"
+  default     = "my-random-data-bucket"
 }
