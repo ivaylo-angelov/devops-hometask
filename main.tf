@@ -67,7 +67,7 @@ resource "aws_iam_policy" "lambda_policy" {
 
 resource "aws_iam_role_policy_attachment" "lambda_attach_policy" {
   role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.random_data_lambda_policy.arn
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
 data "archive_file" "lambda_zip" {
@@ -80,7 +80,7 @@ resource "aws_lambda_function" "random_data_lambda" {
   function_name = "random_data_lambda"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.12"
-  role          = aws_iam_role.random_data_lambda_role.arn
+  role          = aws_iam_role.lambda_role.arn
   timeout       = 60
   memory_size   = 128
 
