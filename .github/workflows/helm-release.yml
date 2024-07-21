@@ -46,4 +46,4 @@ jobs:
     - name: Package and Push Helm Chart
       run: |
         helm package ./helm-chart/my-backend-app
-        helm s3 push ./my-backend-app-*.tgz my-repo --relative
+        helm s3 push --ignore-if-exists ./my-backend-app-*.tgz my-repo --relative
