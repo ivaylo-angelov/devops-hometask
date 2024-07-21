@@ -35,7 +35,7 @@ jobs:
 
     - name: Add S3 repository to Helm
       run: |
-        helm repo add stable s3://${{ secrets.S3_BUCKET }}/stable
+        helm repo add my-repo s3://${{ secrets.S3_BUCKET }}
         helm repo update
 
     - name: Update Helm dependencies
@@ -46,4 +46,4 @@ jobs:
     - name: Package and Push Helm Chart
       run: |
         helm package ./helm-chart/my-backend-app
-        helm s3 push ./my-backend-app-*.tgz stable
+        helm s3 push ./my-backend-app-*.tgz my-repo --relative
