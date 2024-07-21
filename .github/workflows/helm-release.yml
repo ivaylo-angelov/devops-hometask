@@ -40,7 +40,7 @@ jobs:
 
     - name: Update Helm dependencies
       run: |
-        cd helm-charts/my-backend-app
+        cd helm-chart/my-backend-app
         helm dependency update   
 
     - name: Package and Push Helm Chart
