@@ -78,7 +78,7 @@ Notes:
 - The Coinmarketcap API key is stored in github actions as secret and then created with terraform as secret in Secrets Manager. Lambda then picks it up using the secrets manager api.
 - In Account A(the account where this repository is deploying the resources) an IAM role is created with terraform that allows lambda to put objects in the s3 bucket in Account B(where the s3 bucket is). An s3 bucket policy allows only the lambda role in Account A to put objects(cross account policy).
 - I picked libraries for the lambda function that already come with the runtime to avoid having another build step(e.g. requests isn't included, but urllib is)
-- For the custom domain I used AWS ACM and imported a self-signed certificate. The API Gateway is also deployed as Regional, because Edge-optimized uses CloudFront underneath(and CF checks if the certificate is issued by a trusted CA).
+- For the custom domain I used AWS ACM and imported a self-signed certificate. The API Gateway is also deployed as Regional, because Edge-optimized uses CloudFront underneath(and CF checks if the certificate is issued by a trusted CA). Because Route53 domains are expensive :disappointed_relieved:
 
 ## Testing
 
