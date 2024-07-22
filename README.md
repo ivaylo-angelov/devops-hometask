@@ -10,12 +10,13 @@ For this solution I used python and fastapi to create the backend with 2 endpoin
 - The helm chart also deploys an ingress resource with the two paths for /populate and /delete.
 
 ## Prerequisites
-The easist way to test the helm chart is to deploy it on Minikube: https://minikube.sigs.k8s.io/docs/. You will also need to have an API key for coinmarketcap and have Vault running.
+The easist way to test the helm chart is to deploy it on Minikube: https://minikube.sigs.k8s.io/docs/. Also have a look at https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Fx86-64%2Fstable%2Fbinary+download#Ingress to enable ingress. 
 
-You can get a free api key for coinmarketcap from here: https://coinmarketcap.com/api/pricing/ (I promise it doesn't take much 😊)
+Note: You will also need to have an API key for coinmarketcap and have Vault running.
+A free api key for coinmarketcap can be obtained from here: https://coinmarketcap.com/api/pricing/ (I promise it doesn't take much time 😊)
 
 ## Installing vault and creating secrets for the backend:
-Most of the instructions are from here: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator up to 'Deploy and sync a secret' and skipping the app namespace. So you can just follow/copy-paste that guide except for the following steps:
+Most of the instructions are from here: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator up to and including 'Deploy and sync a secret' and skipping the app namespace creation. So you can just follow/copy-paste that guide except for the following steps:
 
 Create a role in Vault to enable access to secret.
 ```  
@@ -51,3 +52,15 @@ helm repo update
 helm upgrade -i my-release example-bucket-http/my-backend-app --set postgresql.auth.password=testpass
 ```
 Note: I wanted to avoid having any credentials in values.yaml(even test ones) so used '--set postgresql.auth.password=testpass' here for that. In a real world use case I would probably use: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator#setup-dynamic-secrets
+
+## Testing the application
+
+After the helm chart is deployed and all the pods are running, you can use the the ingress resource's address to create some requests using curl or postman:
+
+```
+curl --location --request POST 'https://gplgx3tdee.execute-api.eu-west-2.amazonaws.com/prod/populate'
+
+curl --location --request DELETE 'localhost/delete'
+```
+
+Using kube-proxy and the included pg-admin ui, the db changes can be reviewed.
