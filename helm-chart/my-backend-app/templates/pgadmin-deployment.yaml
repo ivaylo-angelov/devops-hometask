@@ -1,0 +1,26 @@
+{{- if .Values.pgadmin.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-backend-app.fullname" . }}-pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "my-backend-app.name" . }}-pgadmin
+  template:
+    metadata:
+      labels:
+        app: {{ include "my-backend-app.name" . }}-pgadmin
+    spec:
+      containers:
+        - name: pgadmin
+          image: "{{ .Values.pgadmin.image }}:{{ .Values.pgadmin.tag }}"
+          ports:
+            - containerPort: 80
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: "{{ .Values.pgadmin.env.email }}"
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: "{{ .Values.pgadmin.env.password }}"
+{{- end }}
