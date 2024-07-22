@@ -2,10 +2,6 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-resource "aws_s3_bucket" "data_bucket" {
-  bucket = var.s3_bucket_name
-}
-
 resource "aws_secretsmanager_secret" "coinmarketcap_api_key" {
   name = "coinmarketcap_api_key"
 }
@@ -43,7 +39,7 @@ resource "aws_iam_policy" "lambda_policy" {
           "s3:GetObject"
         ],
         Effect   = "Allow",
-        Resource = "${aws_s3_bucket.data_bucket.arn}/*"
+        Resource = "${var.s3_bucket_arn}/*"
       },
       {
         Action = [

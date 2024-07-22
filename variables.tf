@@ -12,7 +12,13 @@ variable "coinmarketcap_api_key" {
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket"
   type        = string
-  default     = "my-random-data-bucket"
+  default     = "random-data-bucket-123"
+}
+
+variable "s3_bucket_arn" {
+  description = "The arn of the S3 bucket"
+  type        = string
+  default     = "arn:aws:s3:::random-data-bucket-123"
 }
 
 variable "certificate_arn" {
