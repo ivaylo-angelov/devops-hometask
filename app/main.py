@@ -5,8 +5,8 @@ import os
 
 app = FastAPI()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/dbname")
-COINMARKETCAP_API_KEY = os.getenv("COINMARKETCAP_API_KEY", "your_api_key")
+DATABASE_URL = os.getenv("DATABASE_URL")
+COINMARKETCAP_API_KEY = os.getenv("COINMARKETCAP_API_KEY")
 COINMARKETCAP_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
 
 @app.on_event("startup")
@@ -35,14 +35,6 @@ async def populate_db():
     data = response.json()
 
     async with app.state.pool.acquire() as connection:
-        await connection.execute("""
-            CREATE TABLE IF NOT EXISTS crypto_data (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255),
-                symbol VARCHAR(10),
-                price NUMERIC
-            )
-        """)
 
         async with connection.transaction():
             for item in data['data']:
