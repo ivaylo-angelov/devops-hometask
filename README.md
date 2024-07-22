@@ -58,9 +58,13 @@ Note: I wanted to avoid having any credentials in values.yaml(even test ones) so
 After the helm chart is deployed and all the pods are running, you can use the the ingress resource's address to create some requests using curl or postman:
 
 ```
-curl --location --request POST 'https://gplgx3tdee.execute-api.eu-west-2.amazonaws.com/prod/populate'
+curl --location --request POST 'localhost/populate''
 
 curl --location --request DELETE 'localhost/delete'
 ```
 
 Using kube-proxy and the included pg-admin ui, the db changes can be reviewed.
+
+## Caveats and considerations
+
+- There is actually a small bug when deploying for the first time, because the application tries to connect to the database and it fails before postgres is ready. So the backend pod crashes and restarts for a once or twice before it's running.
