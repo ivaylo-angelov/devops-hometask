@@ -1,3 +1,9 @@
+variable "region" {
+  description = "The AWS region to deploy resources in"
+  type        = string
+  default     = "eu-west-2"
+}
+
 variable "coinmarketcap_url" {
   description = "The URL for the CoinMarketCap API"
   type        = string
