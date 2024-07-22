@@ -50,4 +50,4 @@ helm repo add example-bucket-http https://devops-task-charts.s3.eu-west-2.amazon
 helm repo update
 helm upgrade -i my-release example-bucket-http/my-backend-app --set postgresql.auth.password=testpass
 ```
-Note: I wanted to avoid having any credentials in values.yaml(even test ones) so used '--set postgresql.auth.password=testpass' here for that.
+Note: I wanted to avoid having any credentials in values.yaml(even test ones) so used '--set postgresql.auth.password=testpass' here for that. In a real world use case I would probably use: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator#setup-dynamic-secrets
