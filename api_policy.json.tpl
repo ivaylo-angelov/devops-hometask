@@ -5,7 +5,7 @@
       "Effect": "Allow",
       "Principal": "*",
       "Action": "execute-api:Invoke",
-      "Resource": "arn:aws:execute-api:${rest_api_id}/*/*/*"
+      "Resource": "execute-api:/*/*/*"
     }
   ]
 }

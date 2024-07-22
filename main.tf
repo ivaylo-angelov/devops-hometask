@@ -96,6 +96,14 @@ resource "aws_lambda_function_event_invoke_config" "event_invoke_config" {
   maximum_retry_attempts = 0
 }
 
+resource "aws_lambda_permission" "api_gateway_lambda_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.random_data_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "arn:aws:execute-api:${data.aws_caller_identity.current.account_id}:*:${aws_api_gateway_rest_api.random_data_api.id}/*/*"
+}
+
 resource "aws_api_gateway_rest_api" "random_data_api" {
   name        = "RandomDataAPI"
   description = "API Gateway to trigger Lambda for random data"
@@ -125,7 +133,8 @@ resource "aws_api_gateway_integration" "lambda_integration" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda_integration
+    aws_api_gateway_integration.lambda_integration,
+    aws_lambda_permission.api_gateway_lambda_permission
   ]
   rest_api_id = aws_api_gateway_rest_api.random_data_api.id
   stage_name  = "prod"
@@ -149,7 +158,5 @@ resource "aws_api_gateway_base_path_mapping" "path_mapping" {
 resource "aws_api_gateway_rest_api_policy" "api_policy" {
   rest_api_id = aws_api_gateway_rest_api.random_data_api.id
 
-  policy = templatefile("${path.module}/api_policy.json.tpl", {
-    rest_api_id = aws_api_gateway_rest_api.random_data_api.id
-  })
+  policy = templatefile("${path.module}/api_policy.json.tpl")
 }
