@@ -93,3 +93,4 @@ curl --location --request POST 'https://gplgx3tdee.execute-api.eu-west-2.amazona
 - The s3 bucket policy in account B is created manually.
 - Most of the terraform resources are created for this specific use-case, but a lot of them can benefit from using modules.
 - At the moment, there is no terraform plan review or approval step.
+- API Gateway's resource policy is made open by design to allow for easy testing of this solution. A much fine-grained policy should be used in a real environment.
