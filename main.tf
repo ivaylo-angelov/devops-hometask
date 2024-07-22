@@ -136,7 +136,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 }
 
 resource "aws_api_gateway_domain_name" "api_domain" {
-  domain_name    = "example.api.com"
+  domain_name    = "api.example.com"
   certificate_arn = var.certificate_arn
 
   endpoint_configuration {
