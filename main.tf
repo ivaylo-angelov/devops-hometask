@@ -152,12 +152,13 @@ resource "aws_api_gateway_rest_api_policy" "api_policy" {
   policy = templatefile("${path.module}/api_policy.json.tpl", {})
 }
 
-data "aws_caller_identity" "current" {}
-
-resource "aws_lambda_permission" "api_gateway_lambda_permission" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+resource "aws_lambda_permission" "lambda_permission" {
+  statement_id  = "AllowMyDemoAPIInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.random_data_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${data.aws_caller_identity.current.account_id}:${var.region}:${aws_api_gateway_rest_api.random_data_api.id}/*/*"
+
+  # The /* part allows invocation from any stage, method and resource path
+  # within API Gateway.
+  source_arn = "${aws_api_gateway_rest_api.random_data_api.execution_arn}/*"
 }
