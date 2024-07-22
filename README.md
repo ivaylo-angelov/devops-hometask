@@ -49,7 +49,7 @@ Once you have vault running and you have verified that the secret exists, you ca
 ```
 helm repo add example-bucket-http https://devops-task-charts.s3.eu-west-2.amazonaws.com/
 helm repo update
-helm upgrade -i my-release example-bucket-http/my-backend-app --set postgresql.auth.password=testpass --set pgadmin.env.email=admin@test --set pgadmin.env.password=testpas
+helm upgrade -i my-release example-bucket-http/my-backend-app --set postgresql.auth.password=testpass --set pgadmin.env.email=admin@admin.com --set pgadmin.env.password=testpass --set pgadmin.enabled=true
 ```
 Note: I wanted to avoid having any credentials in values.yaml(even test ones) so used '--set' here for the test credentials for postgresql and pgadmin. In a real world use case I would probably use: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator#setup-dynamic-secrets
 
