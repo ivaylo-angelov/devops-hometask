@@ -2,8 +2,6 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-data "aws_caller_identity" "current" {}
-
 resource "aws_secretsmanager_secret" "coinmarketcap_api_key" {
   name = "coinmarketcap_api_key"
 }
@@ -96,14 +94,6 @@ resource "aws_lambda_function" "random_data_lambda" {
 resource "aws_lambda_function_event_invoke_config" "event_invoke_config" {
   function_name = aws_lambda_function.random_data_lambda.function_name
   maximum_retry_attempts = 0
-}
-
-resource "aws_lambda_permission" "api_gateway_lambda_permission" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.random_data_lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${data.aws_caller_identity.current.account_id}:*:${aws_api_gateway_rest_api.random_data_api.id}/*/*"
 }
 
 resource "aws_api_gateway_rest_api" "random_data_api" {
