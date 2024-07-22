@@ -68,3 +68,28 @@ Using kube-proxy and the included pg-admin ui, the db changes can be reviewed.
 ## Caveats and considerations
 
 - There is actually a small bug when deploying for the first time, because the application tries to connect to the database and it fails before postgres is ready. So the backend pod crashes and restarts for a once or twice before it's running.
+
+## DEVOPS exercise statement 2
+
+This exercise also uses Coinmarketcap's api to get random data. The lambda function will then create a random file in s3 every time it gets invoked.
+
+Notes:
+- I'm using remote s3 state for terraform and dynamodb locks. See backend.tf
+- The Coinmarketcap API key is stored in github actions as secret and then created with terraform as secret in Secrets Manager. Lambda then picks it up using the secrets manager api.
+- In Account A(the account where this repository is deploying the resources) an IAM role is created with terraform that allows lambda to put objects in the s3 bucket in Account B(where the s3 bucket is). An s3 bucket policy allows only the lambda role in Account A to put objects(cross account policy).
+- I picked libraries for the lambda function that already come with the runtime to avoid having another build step(e.g. requests isn't included, but urllib is)
+- For the custom domain I used AWS ACM and imported a self-signed certificate. The API Gateway is also deployed as Regional, because Edge-optimized uses CloudFront underneath(and CF checks if the certificate is issued by a trusted CA).
+
+## Testing
+
+You can use curl or postman to invoke the lambda function using API Gateway: 
+
+``
+curl --location --request POST 'https://gplgx3tdee.execute-api.eu-west-2.amazonaws.com/prod/populate'
+``
+
+## Caveats
+
+- The s3 bucket policy in account B is created manually.
+- Most of the terraform resources are created for this specific use-case, but a lot of them can benefit from using modules.
+- At the moment, there is no terraform plan review or approval step.
