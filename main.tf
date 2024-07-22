@@ -125,8 +125,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda_integration,
-    aws_lambda_permission.api_gateway_lambda_permission
+    aws_api_gateway_integration.lambda_integration
   ]
   rest_api_id = aws_api_gateway_rest_api.random_data_api.id
   stage_name  = "prod"
