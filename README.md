@@ -9,13 +9,13 @@ For this solution I used python and fastapi to create the backend with 2 endpoin
 - For the db schema, I decided to use a feature of the bitnami helm chart, see values.yaml.
 - The helm chart also deploys an ingress resource with the two paths for /populate and /delete.
 
-## Installing and testing
+## Prerequisites
 The easist way to test the helm chart is to deploy it on Minikube: https://minikube.sigs.k8s.io/docs/. You will also need to have an API key for coinmarketcap and have Vault running.
 
 You can get a free api key for coinmarketcap from here: https://coinmarketcap.com/api/pricing/ (I promise it doesn't take much 😊)
 
 ## Installing vault and creating secrets for the backend:
-Most of the instructions are from here: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator so you can just follow that guide except for the following steps:
+Most of the instructions are from here: https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator up to 'Deploy and sync a secret' and skipping the app namespace. So you can just follow/copy-paste that guide except for the following steps:
 
 Create a role in Vault to enable access to secret.
 ```  
@@ -38,3 +38,16 @@ Set up the Kubernetes authentication for the secret and Create the secret names 
 kubectl apply -f vault/vault-auth-static.yaml
 kubectl apply -f vault/static-secret.yaml
 ```
+The end result should be to have a secret called 'secret-kv' in your default k8s namespace with your a coinmarket_api_key in it that contains your api key:
+```
+kubectl get secret secretkv -o yaml
+```
+## Deploying the helm chart
+Once you have vault running and you have verified that the secret exists, you can install the helm chart:
+
+```
+helm repo add example-bucket-http https://devops-task-charts.s3.eu-west-2.amazonaws.com/
+helm repo update
+helm upgrade -i my-release example-bucket-http/my-backend-app --set postgresql.auth.password=testpass
+```
+Note: I wanted to avoid having any credentials in values.yaml(even test ones) so used '--set postgresql.auth.password=testpass' here for that.
